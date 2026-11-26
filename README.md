@@ -23,15 +23,15 @@ PC는 "어디로 가"라는 command만 보내고, IK와 motor control 같은 무
 - **What**: Python virtual environment, USB serial connection, G-code, homing, 첫 coordinate move
 - **Output**: `test_connect.py`, `find_port.py` (USB VID로 robot port 자동 탐색)
 
-### Step 1. Forward Kinematics (Python) 🔄
+### Step 1. Forward Kinematics (Python) ✅
 **"Robot은 자기 손이 어디 있는지 어떻게 아는가"**
 - **Why**: Joint angle만으로 end-effector position을 계산하는 원리를 이해한다. Rotation matrix와 homogeneous transformation은 robotics의 기본 linear algebra이고, 이후 모든 coordinate transform의 바탕이 된다.
 - **What**:
-  1. Ground truth data collection: joint angle ↔ robot이 report한 pose
-  2. 2-link planar FK로 concept 잡기
-  3. Mirobot 6-axis FK를 numpy로 implement (DH parameter)
-  4. Robot report 값과 error 비교
-- **Output**: `collect_data.py`, `data/fk_samples.csv`, FK module, error analysis
+  1. ✅ Ground truth data collection: joint angle ↔ robot이 report한 pose
+  2. ✅ 2-link planar FK로 concept 잡기 (J1 + J2 + J3, error 0.01 mm)
+  3. ✅ Mirobot 6-axis FK를 numpy로 implement (4x4 homogeneous transformation chain)
+  4. ✅ 6-axis 전체 data로 error 비교: max position error **0.012 mm**, max orientation error **0.001°**
+- **Output**: `collect_data.py`, `data/fk_samples.csv`, `fk_planar.py`, `fk_6axis.py`
 
 ### Step 2. Inverse Kinematics (Python)
 **"손을 원하는 곳에 두려면 joint를 어떻게 움직여야 하는가"**
