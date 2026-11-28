@@ -33,15 +33,16 @@ PC는 "어디로 가"라는 command만 보내고, IK와 motor control 같은 무
   4. ✅ 6-axis 전체 data로 error 비교: max position error **0.012 mm**, max orientation error **0.001°**
 - **Output**: `collect_data.py`, `data/fk_samples.csv`, `fk_planar.py`, `fk_6axis.py`
 
-### Step 2. Inverse Kinematics (Python)
+### Step 2. Inverse Kinematics (Python) 🔄
 **"손을 원하는 곳에 두려면 joint를 어떻게 움직여야 하는가"**
 - **Why**: FK의 반대 방향. Motion planning은 "target pose에 가기 위한 joint angle과, 여러 solution 중 어떤 것을 고를지"를 푸는 일이라 IK가 기본이 된다. Solution이 여러 개이거나 없을 수 있다는 점이 FK와의 핵심 차이.
 - **What**:
-  1. 2-link analytic IK (law of cosines + `atan2`), elbow-up / elbow-down 두 solution 확인
-  2. 직접 만든 FK를 이용한 numerical IK (Jacobian 기초)
-  3. `FK(IK(target)) == target` self-check
-  4. 내 IK로 구한 angle을 `set_joint_angle()`로 보내고, firmware IK(`set_tool_pose()`) 결과와 비교
-- **Output**: IK module, solution 비교 결과
+  1. ✅ 2-link analytic IK (law of cosines + `atan2`), elbow-up / elbow-down / unreachable 확인
+  2. ✅ Mirobot IK (tool 수직 아래 자세): decoupling으로 J1~J3 = position, J5·J6 = orientation
+  3. ✅ `FK(IK(target)) == target` self-check: position error 0.000000 mm
+  4. ⬜ 실제 robot에서 firmware IK(`set_tool_pose()`)와 joint angle 비교
+  5. ⬜ (Optional) 직접 만든 FK를 이용한 numerical IK (Jacobian 기초)
+- **Output**: `ik_2link.py`, `ik_mirobot.py`, `ik_robot_test.py`
 
 ### Step 3. Forward Kinematics (C++ / Eigen)
 **"같은 수학을 robot software의 실제 언어로"**
